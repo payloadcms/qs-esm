@@ -8,10 +8,14 @@ Original Maintainer of qs (not of this fork): [Jordan Harband](https://github.co
 
 The **qs** module was originally created and maintained by [TJ Holowaychuk](https://github.com/visionmedia/node-querystring).
 
+## Migrate from qs
+
+Install `qs-esm`, uninstall `qs` and `@types/qs`. Then, replace `import qs from 'qs';` with `import * as qs from 'qs-esm';`.
+
 ## Usage
 
 ```javascript
-import qs from 'qs-esm';
+import * as qs from 'qs-esm';
 import assert from 'assert';
 
 const obj = qs.parse('a=c');
