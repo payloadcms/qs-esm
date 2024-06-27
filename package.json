@@ -32,7 +32,7 @@
   "engines": {
       "node": ">=18"
   },
-  "files": ["lib"],
+  "files": ["lib", "LICENSE.md", "README.md"],
   "devDependencies": {
       "@browserify/envify": "^6.0.0",
       "@browserify/uglifyify": "^6.0.0",
