@@ -1,11 +1,11 @@
 {
   "name": "qs-esm",
   "description": "A querystring parser that supports nesting and arrays, with a depth limit",
-  "homepage": "https://github.com/ljharb/qs",
+  "homepage": "https://github.com/AlessioGr/qs-esm",
   "version": "7.0.0",
   "repository": {
       "type": "git",
-      "url": "https://github.com/ljharb/qs.git"
+      "url": "https://github.com/AlessioGr/qs-esm.git"
   },
   "type": "module",
   "funding": {
