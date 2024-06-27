@@ -11,13 +11,13 @@ The **qs** module was originally created and maintained by [TJ Holowaychuk](http
 ## Usage
 
 ```javascript
-var qs = require('qs');
-var assert = require('assert');
+import qs from 'qs-esm';
+import assert from 'assert';
 
-var obj = qs.parse('a=c');
+const obj = qs.parse('a=c');
 assert.deepEqual(obj, { a: 'c' });
 
-var str = qs.stringify(obj);
+const str = qs.stringify(obj);
 assert.equal(str, 'a=c');
 ```
 
