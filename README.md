@@ -1,3 +1,5 @@
+This is a modernized, esm-only fork of [qs](https://github.com/ljharb/qs) without unnecessary polyfills.
+
 <p align="center">
     <img alt="qs" src="./logos/banner_default.png" width="800" />
 </p>
