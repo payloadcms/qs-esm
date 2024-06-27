@@ -2,7 +2,7 @@
   "name": "qs-esm",
   "description": "A modernized, esm-only fork of qs without unnecessary polyfills",
   "homepage": "https://github.com/AlessioGr/qs-esm",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "repository": {
       "type": "git",
       "url": "https://github.com/AlessioGr/qs-esm.git"
