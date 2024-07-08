@@ -1,6 +1,6 @@
 {
     "name": "qs-esm",
-    "repository": "AlessioGr/qs-esm",
+    "repository": "payloadcms/qs-esm",
     "description": "A modernized, esm-only fork of qs without unnecessary polyfills",
     "version": "6.10.3",
     "keywords": ["querystring", "query", "parser"],
