@@ -4,87 +4,89 @@
   "homepage": "https://github.com/payloadcms/qs-esm",
   "version": "7.0.2",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/payloadcms/qs-esm.git"
+    "type": "git",
+    "url": "https://github.com/payloadcms/qs-esm.git"
   },
   "type": "module",
-  "funding": {
-      "url": "https://github.com/sponsors/ljharb"
-  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "sideEffects": false,
+  "maintainers": [
+    {
+      "name": "Payload",
+      "email": "info@payloadcms.com",
+      "url": "https://payloadcms.com"
+    }
+  ],
   "contributors": [
-      {
-          "name": "Jordan Harband",
-          "email": "ljharb@gmail.com",
-          "url": "http://ljharb.codes"
-      }
+    {
+      "name": "Payload",
+      "email": "info@payloadcms.com",
+      "url": "https://payloadcms.com"
+    },
+    {
+      "name": "Jordan Harband",
+      "email": "ljharb@gmail.com",
+      "url": "http://ljharb.codes"
+    }
   ],
   "keywords": [
-      "querystring",
-      "qs",
-      "query",
-      "url",
-      "parse",
-      "stringify"
+    "querystring",
+    "qs",
+    "query",
+    "url",
+    "parse",
+    "stringify"
   ],
   "engines": {
-      "node": ">=18"
+    "node": ">=18"
   },
-  "files": ["lib", "LICENSE.md", "README.md"],
+  "files": [
+    "lib",
+    "LICENSE.md",
+    "README.md"
+  ],
   "devDependencies": {
-      "@browserify/envify": "^6.0.0",
-      "@browserify/uglifyify": "^6.0.0",
-      "aud": "^2.0.4",
-      "browserify": "^16.5.2",
-      "bundle-collapser": "^1.4.0",
-      "common-shakeify": "~1.0.0",
-      "eclint": "^2.8.1",
-      "es-value-fixtures": "^1.4.2",
-      "@payloadcms/eslint-config": "3.0.0-beta.16",
-      "prettier": "3.3.2",
-      "evalmd": "^0.0.19",
-      "for-each": "^0.3.3",
-      "glob": "=10.3.7",
-      "has-override-mistake": "^1.0.1",
-      "has-property-descriptors": "^1.0.2",
-      "has-symbols": "^1.0.3",
-      "iconv-lite": "^0.5.1",
-      "in-publish": "^2.0.1",
-      "jackspeak": "=2.1.1",
-      "mkdirp": "^0.5.5",
-      "mock-property": "^1.0.3",
-      "module-deps": "^6.2.3",
-      "npmignore": "^0.3.1",
-      "nyc": "^10.3.2",
-      "object-inspect": "^1.13.1",
-      "qs-iconv": "^1.0.4",
-      "safe-publish-latest": "^2.0.0",
-      "safer-buffer": "^2.1.2",
-      "tape": "^5.7.5",
-      "unassertify": "^3.0.1"
+    "@browserify/envify": "^6.0.0",
+    "@browserify/uglifyify": "^6.0.0",
+    "@payloadcms/eslint-config": "3.0.0-beta.16",
+    "browserify": "^16.5.2",
+    "bundle-collapser": "^1.4.0",
+    "common-shakeify": "~1.1.2",
+    "es-value-fixtures": "^1.7.1",
+    "for-each": "^0.3.3",
+    "glob": "=10.4.5",
+    "has-override-mistake": "^1.0.1",
+    "has-property-descriptors": "^1.0.2",
+    "has-symbols": "^1.1.0",
+    "iconv-lite": "^0.5.1",
+    "in-publish": "^2.0.1",
+    "jackspeak": "=2.3.6",
+    "mkdirp": "^0.5.6",
+    "mock-property": "^1.1.0",
+    "module-deps": "^6.2.3",
+    "npmignore": "^0.3.1",
+    "nyc": "^10.3.2",
+    "object-inspect": "^1.13.4",
+    "prettier": "3.5.3",
+    "qs-iconv": "^1.0.4",
+    "safer-buffer": "^2.1.2",
+    "tape": "^5.9.0",
+    "unassertify": "^3.0.1"
   },
   "scripts": {
-      "prepublishOnly": "safe-publish-latest",
-      "prepublish": "not-in-publish || pnpm run prepublishOnly",
-      "pretest": "pnpm run --silent readme && pnpm run --silent lint",
-      "test": "pnpm run tests-only",
-      "tests-only": "tape 'test/**/*.cjs'",
-      "posttest": "aud --production",
-      "readme": "evalmd README.md",
-      "postlint": "eclint check $(git ls-files | xargs find 2> /dev/null | grep -vE 'node_modules|\\.git' | grep -v dist/)",
-      "lint": "eslint --ext=js,mjs ."
+    "test": "tape 'test/**/*.cjs'",
+    "lint": "eslint --ext=js,mjs ."
   },
   "license": "BSD-3-Clause",
   "publishConfig": {
-      "ignore": [
-          "!dist/*",
-          "bower.json",
-          "component.json",
-          ".github/workflows",
-          "logos",
-          "tea.yaml"
-      ]
+    "ignore": [
+      "!dist/*",
+      "bower.json",
+      "component.json",
+      ".github/workflows",
+      "logos",
+      "tea.yaml"
+    ]
   }
 }
