@@ -2,6 +2,9 @@
   "npm.packageManager": "pnpm",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "editor.formatOnSaveMode": "file",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true

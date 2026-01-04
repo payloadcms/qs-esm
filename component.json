@@ -1,15 +1,10 @@
 {
-    "name": "qs-esm",
-    "repository": "payloadcms/qs-esm",
-    "description": "A modernized, esm-only fork of qs without unnecessary polyfills",
-    "version": "6.10.3",
-    "keywords": ["querystring", "query", "parser"],
-    "main": "lib/index.js",
-    "scripts": [
-        "lib/index.js",
-        "lib/parse.js",
-        "lib/stringify.js",
-        "lib/utils.js"
-    ],
-    "license": "BSD-3-Clause"
+  "name": "qs-esm",
+  "repository": "payloadcms/qs-esm",
+  "description": "A modernized, esm-only fork of qs without unnecessary polyfills",
+  "version": "6.10.3",
+  "keywords": ["querystring", "query", "parser"],
+  "main": "lib/index.js",
+  "scripts": ["lib/index.js", "lib/parse.js", "lib/stringify.js", "lib/utils.js"],
+  "license": "BSD-3-Clause"
 }

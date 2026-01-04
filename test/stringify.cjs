@@ -2,7 +2,6 @@
 
 var test = require('tape')
 
-
 var iconv = require('iconv-lite')
 var SaferBuffer = require('safer-buffer').Buffer
 var hasSymbols = require('has-symbols')
