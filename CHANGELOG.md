@@ -1,3 +1,7 @@
+# Changelog
+
+This is the changelog for the original `qs` package up until this fork was created. Changes to this fork are not included here.
+
 ## **6.12.1**
 
 - [Fix] `parse`: Disable `decodeDotInKeys` by default to restore previous behavior (#501)
