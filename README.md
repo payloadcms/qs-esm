@@ -11,11 +11,11 @@ A querystring parsing and stringifying library — modernized ESM-only fork of [
 
 Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1) with the following changes:
 
-- **ESM-only** — native ES modules, no CommonJS
-- **Node 18+** — polyfills for older runtimes removed
-- **Zero dependencies** — `side-channel` replaced with native `WeakMap`
-- **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. These were legacy IE/Rails browser quirks that no longer apply. Removes unnecessary code and branching on every encode/decode call. Encoder/decoder callbacks no longer receive a `charset` argument
-- **Security backport** — `arrayLimit` now applies to `[]` notation ([GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883))
+- ✅ **ESM-only** — native ES modules, no CommonJS
+- ✅ **Node 18+** — polyfills for older runtimes removed
+- ✅ **Zero dependencies** — `side-channel` replaced with native `WeakMap`
+- ✅ **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. Legacy IE/Rails quirks that no longer apply. Encoder/decoder callbacks no longer receive a `charset` argument
+- ✅ **Security backport** — `arrayLimit` now applies to `[]` notation ([GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883))
 
 ## Migrate from qs
 
