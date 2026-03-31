@@ -6,11 +6,11 @@ inputs:
   node-version:
     description: Node.js version
     required: true
-    default: 22.6.0
+    default: 24.14.1
   pnpm-version:
     description: Pnpm version
     required: true
-    default: 9.7.1
+    default: 10.33
   pnpm-run-install:
     description: Whether to run pnpm install
     required: false
