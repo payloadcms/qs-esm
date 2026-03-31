@@ -1,4 +1,4 @@
-This is a modernized, esm-only fork of [qs](https://github.com/ljharb/qs) without unnecessary polyfills. This fork is not endorsed by [Jordan Harband](https://github.com/ljharb), the lead maintainer of qs.
+This is a modernized, ESM-only fork of [qs](https://github.com/ljharb/qs) without unnecessary polyfills. This fork is not endorsed by [Jordan Harband](https://github.com/ljharb), the lead maintainer of qs.
 
 # qs-esm
 
@@ -8,9 +8,33 @@ Original Maintainer of qs (not of this fork): [Jordan Harband](https://github.co
 
 The **qs** module was originally created and maintained by [TJ Holowaychuk](https://github.com/visionmedia/node-querystring).
 
+## Changes from qs
+
+**Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1).**
+
+Changes made in this fork:
+
+- **ESM-only** — native ES modules; no CommonJS support
+- **Node 18+ required** — removed polyfills for older Node.js versions
+- **Zero dependencies** — replaced the `side-channel` npm package with a native `WeakMap` for cyclic reference detection in `stringify`
+- **UTF-8 only** — dropped `charset`, `charsetSentinel`, and `interpretNumericEntities`. These were for legacy browser quirks (old IE iso-8859-1 form submissions, Rails charset sentinel params) that don't apply to modern apps. Dropping them removes branching on every encode/decode call and reduces overall complexity. Custom encoder/decoder callbacks no longer receive a `charset` argument
+- **Security backport** — `arrayLimit` now applies to `[]` (bracket-only) notation, closing the same gap addressed by [GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883) in upstream qs
+
 ## Migrate from qs
 
-Install `qs-esm`, uninstall `qs` and `@types/qs`. Then, replace `import qs from 'qs';` with `import * as qs from 'qs-esm';`.
+Install `qs-esm`, uninstall `qs` and `@types/qs`. Then replace:
+
+```js
+import qs from 'qs'
+// or
+const qs = require('qs')
+```
+
+with:
+
+```js
+import * as qs from 'qs-esm'
+```
 
 ## Usage
 
@@ -171,50 +195,6 @@ assert.deepEqual(qs.parse('foo=bar&foo=baz', { duplicates: 'first' }), { foo: 'b
 assert.deepEqual(qs.parse('foo=bar&foo=baz', { duplicates: 'last' }), { foo: 'baz' })
 ```
 
-If you have to deal with legacy browsers or services, there's also support for decoding percent-encoded octets as iso-8859-1:
-
-```javascript
-var oldCharset = qs.parse('a=%A7', { charset: 'iso-8859-1' })
-assert.deepEqual(oldCharset, { a: '§' })
-```
-
-Some services add an initial `utf8=✓` value to forms so that old Internet Explorer versions are more likely to submit the form as utf-8.
-Additionally, the server can check the value against wrong encodings of the checkmark character and detect that a query string or `application/x-www-form-urlencoded` body was _not_ sent as utf-8, eg. if the form had an `accept-charset` parameter or the containing page had a different character set.
-
-**qs** supports this mechanism via the `charsetSentinel` option.
-If specified, the `utf8` parameter will be omitted from the returned object.
-It will be used to switch to `iso-8859-1`/`utf-8` mode depending on how the checkmark is encoded.
-
-**Important**: When you specify both the `charset` option and the `charsetSentinel` option, the `charset` will be overridden when the request contains a `utf8` parameter from which the actual charset can be deduced.
-In that sense the `charset` will behave as the default charset rather than the authoritative charset.
-
-```javascript
-var detectedAsUtf8 = qs.parse('utf8=%E2%9C%93&a=%C3%B8', {
-  charset: 'iso-8859-1',
-  charsetSentinel: true,
-})
-assert.deepEqual(detectedAsUtf8, { a: 'ø' })
-
-// Browsers encode the checkmark as &#10003; when submitting as iso-8859-1:
-var detectedAsIso8859_1 = qs.parse('utf8=%26%2310003%3B&a=%F8', {
-  charset: 'utf-8',
-  charsetSentinel: true,
-})
-assert.deepEqual(detectedAsIso8859_1, { a: 'ø' })
-```
-
-If you want to decode the `&#...;` syntax to the actual character, you can specify the `interpretNumericEntities` option as well:
-
-```javascript
-var detectedAsIso8859_1 = qs.parse('a=%26%239786%3B', {
-  charset: 'iso-8859-1',
-  interpretNumericEntities: true,
-})
-assert.deepEqual(detectedAsIso8859_1, { a: '☺' })
-```
-
-It also works when the charset has been detected in `charsetSentinel` mode.
-
 ### Parsing Arrays
 
 **qs** can also parse arrays using a similar `[]` notation:
@@ -346,6 +326,8 @@ var encodedValues = qs.stringify(
 assert.equal(encodedValues, 'a=b&c[0]=d&c[1]=e%3Df&f[0][0]=g&f[1][0]=h')
 ```
 
+### Encoding
+
 This encoding can also be replaced by a custom encoding method set as `encoder` option:
 
 ```javascript
@@ -373,13 +355,13 @@ var decoded = qs.parse('x=z', {
 })
 ```
 
-You can encode keys and values using different logic by using the type argument provided to the encoder:
+You can encode keys and values using different logic by using the `type` argument provided to the encoder:
 
 ```javascript
 var encoded = qs.stringify(
   { a: { b: 'c' } },
   {
-    encoder: function (str, defaultEncoder, charset, type) {
+    encoder: function (str, defaultEncoder, type) {
       if (type === 'key') {
         return // Encoded key
       } else if (type === 'value') {
@@ -390,11 +372,11 @@ var encoded = qs.stringify(
 )
 ```
 
-The type argument is also provided to the decoder:
+The `type` argument is also provided to the decoder:
 
 ```javascript
 var decoded = qs.parse('x=z', {
-  decoder: function (str, defaultDecoder, charset, type) {
+  decoder: function (str, defaultDecoder, type) {
     if (type === 'key') {
       return // Decoded key
     } else if (type === 'value') {
@@ -631,52 +613,6 @@ To completely skip rendering keys with `null` values, use the `skipNulls` flag:
 ```javascript
 var nullsSkipped = qs.stringify({ a: 'b', c: null }, { skipNulls: true })
 assert.equal(nullsSkipped, 'a=b')
-```
-
-If you're communicating with legacy systems, you can switch to `iso-8859-1` using the `charset` option:
-
-```javascript
-var iso = qs.stringify({ æ: 'æ' }, { charset: 'iso-8859-1' })
-assert.equal(iso, '%E6=%E6')
-```
-
-Characters that don't exist in `iso-8859-1` will be converted to numeric entities, similar to what browsers do:
-
-```javascript
-var numeric = qs.stringify({ a: '☺' }, { charset: 'iso-8859-1' })
-assert.equal(numeric, 'a=%26%239786%3B')
-```
-
-You can use the `charsetSentinel` option to announce the character by including an `utf8=✓` parameter with the proper encoding if the checkmark, similar to what Ruby on Rails and others do when submitting forms.
-
-```javascript
-var sentinel = qs.stringify({ a: '☺' }, { charsetSentinel: true })
-assert.equal(sentinel, 'utf8=%E2%9C%93&a=%E2%98%BA')
-
-var isoSentinel = qs.stringify({ a: 'æ' }, { charsetSentinel: true, charset: 'iso-8859-1' })
-assert.equal(isoSentinel, 'utf8=%26%2310003%3B&a=%E6')
-```
-
-### Dealing with special character sets
-
-By default the encoding and decoding of characters is done in `utf-8`, and `iso-8859-1` support is also built in via the `charset` parameter.
-
-If you wish to encode querystrings to a different character set (i.e.
-[Shift JIS](https://en.wikipedia.org/wiki/Shift_JIS)) you can use the
-[`qs-iconv`](https://github.com/martinheidegger/qs-iconv) library:
-
-```javascript
-var encoder = require('qs-iconv/encoder')('shift_jis')
-var shiftJISEncoded = qs.stringify({ a: 'こんにちは！' }, { encoder: encoder })
-assert.equal(shiftJISEncoded, 'a=%82%B1%82%F1%82%C9%82%BF%82%CD%81I')
-```
-
-This also works for decoding of query strings:
-
-```javascript
-var decoder = require('qs-iconv/decoder')('shift_jis')
-var obj = qs.parse('a=%82%B1%82%F1%82%C9%82%BF%82%CD%81I', { decoder: decoder })
-assert.deepEqual(obj, { a: 'こんにちは！' })
 ```
 
 ### RFC 3986 and RFC 1738 space encoding

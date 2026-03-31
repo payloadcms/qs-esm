@@ -624,11 +624,11 @@ test('parse()', async function (t) {
   t.test(
     'use number decoder, parses string that has one number with comma option enabled',
     function (st) {
-      var decoder = function (str, defaultDecoder, charset, type) {
+      var decoder = function (str, defaultDecoder, type) {
         if (!isNaN(Number(str))) {
           return parseFloat(str)
         }
-        return defaultDecoder(str, defaultDecoder, charset, type)
+        return defaultDecoder(str, defaultDecoder, type)
       }
 
       st.deepEqual(qs.parse('foo=1', { comma: true, decoder: decoder }), { foo: 1 })
@@ -1015,191 +1015,13 @@ test('parse()', async function (t) {
     st.end()
   })
 
-  t.test('throws if an invalid charset is specified', function (st) {
-    st['throws'](function () {
-      qs.parse('a=b', { charset: 'foobar' })
-    }, new TypeError('The charset option must be either utf-8, iso-8859-1, or undefined'))
-    st.end()
-  })
-
-  t.test('parses an iso-8859-1 string if asked to', function (st) {
-    st.deepEqual(qs.parse('%A2=%BD', { charset: 'iso-8859-1' }), { '¢': '½' })
-    st.end()
-  })
-
-  var urlEncodedCheckmarkInUtf8 = '%E2%9C%93'
-  var urlEncodedOSlashInUtf8 = '%C3%B8'
-  var urlEncodedNumCheckmark = '%26%2310003%3B'
-  var urlEncodedNumSmiley = '%26%239786%3B'
-
-  t.test(
-    'prefers an utf-8 charset specified by the utf8 sentinel to a default charset of iso-8859-1',
-    function (st) {
-      st.deepEqual(
-        qs.parse(
-          'utf8=' +
-            urlEncodedCheckmarkInUtf8 +
-            '&' +
-            urlEncodedOSlashInUtf8 +
-            '=' +
-            urlEncodedOSlashInUtf8,
-          { charsetSentinel: true, charset: 'iso-8859-1' },
-        ),
-        { ø: 'ø' },
-      )
-      st.end()
-    },
-  )
-
-  t.test(
-    'prefers an iso-8859-1 charset specified by the utf8 sentinel to a default charset of utf-8',
-    function (st) {
-      st.deepEqual(
-        qs.parse(
-          'utf8=' +
-            urlEncodedNumCheckmark +
-            '&' +
-            urlEncodedOSlashInUtf8 +
-            '=' +
-            urlEncodedOSlashInUtf8,
-          { charsetSentinel: true, charset: 'utf-8' },
-        ),
-        { 'Ã¸': 'Ã¸' },
-      )
-      st.end()
-    },
-  )
-
-  t.test(
-    'does not require the utf8 sentinel to be defined before the parameters whose decoding it affects',
-    function (st) {
-      st.deepEqual(
-        qs.parse('a=' + urlEncodedOSlashInUtf8 + '&utf8=' + urlEncodedNumCheckmark, {
-          charsetSentinel: true,
-          charset: 'utf-8',
-        }),
-        { a: 'Ã¸' },
-      )
-      st.end()
-    },
-  )
-
-  t.test('should ignore an utf8 sentinel with an unknown value', function (st) {
-    st.deepEqual(
-      qs.parse('utf8=foo&' + urlEncodedOSlashInUtf8 + '=' + urlEncodedOSlashInUtf8, {
-        charsetSentinel: true,
-        charset: 'utf-8',
-      }),
-      { ø: 'ø' },
-    )
-    st.end()
-  })
-
-  t.test(
-    'uses the utf8 sentinel to switch to utf-8 when no default charset is given',
-    function (st) {
-      st.deepEqual(
-        qs.parse(
-          'utf8=' +
-            urlEncodedCheckmarkInUtf8 +
-            '&' +
-            urlEncodedOSlashInUtf8 +
-            '=' +
-            urlEncodedOSlashInUtf8,
-          { charsetSentinel: true },
-        ),
-        { ø: 'ø' },
-      )
-      st.end()
-    },
-  )
-
-  t.test(
-    'uses the utf8 sentinel to switch to iso-8859-1 when no default charset is given',
-    function (st) {
-      st.deepEqual(
-        qs.parse(
-          'utf8=' +
-            urlEncodedNumCheckmark +
-            '&' +
-            urlEncodedOSlashInUtf8 +
-            '=' +
-            urlEncodedOSlashInUtf8,
-          { charsetSentinel: true },
-        ),
-        { 'Ã¸': 'Ã¸' },
-      )
-      st.end()
-    },
-  )
-
-  t.test(
-    'interprets numeric entities in iso-8859-1 when `interpretNumericEntities`',
-    function (st) {
-      st.deepEqual(
-        qs.parse('foo=' + urlEncodedNumSmiley, {
-          charset: 'iso-8859-1',
-          interpretNumericEntities: true,
-        }),
-        { foo: '☺' },
-      )
-      st.end()
-    },
-  )
-
-  t.test(
-    'handles a custom decoder returning `null`, in the `iso-8859-1` charset, when `interpretNumericEntities`',
-    function (st) {
-      st.deepEqual(
-        qs.parse('foo=&bar=' + urlEncodedNumSmiley, {
-          charset: 'iso-8859-1',
-          decoder: function (str, defaultDecoder, charset) {
-            return str ? defaultDecoder(str, defaultDecoder, charset) : null
-          },
-          interpretNumericEntities: true,
-        }),
-        { foo: null, bar: '☺' },
-      )
-      st.end()
-    },
-  )
-
-  t.test(
-    'does not interpret numeric entities in iso-8859-1 when `interpretNumericEntities` is absent',
-    function (st) {
-      st.deepEqual(qs.parse('foo=' + urlEncodedNumSmiley, { charset: 'iso-8859-1' }), {
-        foo: '&#9786;',
-      })
-      st.end()
-    },
-  )
-
-  t.test(
-    'does not interpret numeric entities when the charset is utf-8, even when `interpretNumericEntities`',
-    function (st) {
-      st.deepEqual(
-        qs.parse('foo=' + urlEncodedNumSmiley, {
-          charset: 'utf-8',
-          interpretNumericEntities: true,
-        }),
-        { foo: '&#9786;' },
-      )
-      st.end()
-    },
-  )
-
-  t.test('does not interpret %uXXXX syntax in iso-8859-1 mode', function (st) {
-    st.deepEqual(qs.parse('%u263A=%u263A', { charset: 'iso-8859-1' }), { '%u263A': '%u263A' })
-    st.end()
-  })
-
   t.test('allows for decoding keys and values differently', function (st) {
-    var decoder = function (str, defaultDecoder, charset, type) {
+    var decoder = function (str, defaultDecoder, type) {
       if (type === 'key') {
-        return defaultDecoder(str, defaultDecoder, charset, type).toLowerCase()
+        return defaultDecoder(str, defaultDecoder, type).toLowerCase()
       }
       if (type === 'value') {
-        return defaultDecoder(str, defaultDecoder, charset, type).toUpperCase()
+        return defaultDecoder(str, defaultDecoder, type).toUpperCase()
       }
       throw 'this should never happen! type: ' + type
     }

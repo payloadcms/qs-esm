@@ -46,8 +46,8 @@ test('stringify()', async function (t) {
 
   t.test('stringifies bigints', { skip: !hasBigInt }, function (st) {
     var three = BigInt(3)
-    var encodeWithN = function (value, defaultEncoder, charset) {
-      var result = defaultEncoder(value, defaultEncoder, charset)
+    var encodeWithN = function (value, defaultEncoder) {
+      var result = defaultEncoder(value, defaultEncoder)
       return typeof value === 'bigint' ? result + 'n' : result
     }
     st.equal(qs.stringify(three), '')
@@ -1413,44 +1413,6 @@ test('stringify()', async function (t) {
     st.end()
   })
 
-  t.test('throws if an invalid charset is specified', function (st) {
-    st['throws'](function () {
-      qs.stringify({ a: 'b' }, { charset: 'foobar' })
-    }, new TypeError('The charset option must be either utf-8, iso-8859-1, or undefined'))
-    st.end()
-  })
-
-  t.test('respects a charset of iso-8859-1', function (st) {
-    st.equal(qs.stringify({ æ: 'æ' }, { charset: 'iso-8859-1' }), '%E6=%E6')
-    st.end()
-  })
-
-  t.test('encodes unrepresentable chars as numeric entities in iso-8859-1 mode', function (st) {
-    st.equal(qs.stringify({ a: '☺' }, { charset: 'iso-8859-1' }), 'a=%26%239786%3B')
-    st.end()
-  })
-
-  t.test('respects an explicit charset of utf-8 (the default)', function (st) {
-    st.equal(qs.stringify({ a: 'æ' }, { charset: 'utf-8' }), 'a=%C3%A6')
-    st.end()
-  })
-
-  t.test('`charsetSentinel` option', function (st) {
-    st.equal(
-      qs.stringify({ a: 'æ' }, { charsetSentinel: true, charset: 'utf-8' }),
-      'utf8=%E2%9C%93&a=%C3%A6',
-      'adds the right sentinel when instructed to and the charset is utf-8',
-    )
-
-    st.equal(
-      qs.stringify({ a: 'æ' }, { charsetSentinel: true, charset: 'iso-8859-1' }),
-      'utf8=%26%2310003%3B&a=%E6',
-      'adds the right sentinel when instructed to and the charset is iso-8859-1',
-    )
-
-    st.end()
-  })
-
   t.test('does not mutate the options argument', function (st) {
     var options = {}
     qs.stringify({}, options)
@@ -1479,12 +1441,12 @@ test('stringify()', async function (t) {
   })
 
   t.test('allows for encoding keys and values differently', function (st) {
-    var encoder = function (str, defaultEncoder, charset, type) {
+    var encoder = function (str, defaultEncoder, type) {
       if (type === 'key') {
-        return defaultEncoder(str, defaultEncoder, charset, type).toLowerCase()
+        return defaultEncoder(str, defaultEncoder, type).toLowerCase()
       }
       if (type === 'value') {
-        return defaultEncoder(str, defaultEncoder, charset, type).toUpperCase()
+        return defaultEncoder(str, defaultEncoder, type).toUpperCase()
       }
       throw 'this should never happen! type: ' + type
     }
@@ -1651,7 +1613,7 @@ test('stringify()', async function (t) {
     }
 
     st.equal(
-      qs.stringify(obj, { arrayFormat: 'bracket', charset: 'utf-8' }),
+      qs.stringify(obj, { arrayFormat: 'bracket' }),
       'foo=' + expected.join(''),
     )
 

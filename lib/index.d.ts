@@ -1,7 +1,7 @@
 export as namespace QSESM
 
-export type defaultEncoder = (str: any, defaultEncoder?: any, charset?: string) => string
-export type defaultDecoder = (str: string, decoder?: any, charset?: string) => string
+export type defaultEncoder = (str: any, defaultEncoder?: any) => string
+export type defaultDecoder = (str: string, decoder?: any) => string
 
 export type BooleanOptional = boolean | undefined
 
@@ -11,7 +11,7 @@ export interface IStringifyBaseOptions {
   skipNulls?: boolean | undefined
   encode?: boolean | undefined
   encoder?:
-    | ((str: any, defaultEncoder: defaultEncoder, charset: string, type: 'key' | 'value') => string)
+    | ((str: any, defaultEncoder: defaultEncoder, type: 'key' | 'value') => string)
     | undefined
   filter?: Array<string | number> | ((prefix: string, value: any) => any) | undefined
   arrayFormat?: 'indices' | 'brackets' | 'repeat' | 'comma' | undefined
@@ -21,8 +21,6 @@ export interface IStringifyBaseOptions {
   format?: 'RFC1738' | 'RFC3986' | undefined
   encodeValuesOnly?: boolean | undefined
   addQueryPrefix?: boolean | undefined
-  charset?: 'utf-8' | 'iso-8859-1' | undefined
-  charsetSentinel?: boolean | undefined
 }
 
 export type IStringifyDynamicOptions<AllowDots extends BooleanOptional> = AllowDots extends true
@@ -37,7 +35,7 @@ export interface IParseBaseOptions {
   delimiter?: string | RegExp | undefined
   depth?: number | false | undefined
   decoder?:
-    | ((str: string, defaultDecoder: defaultDecoder, charset: string, type: 'key' | 'value') => any)
+    | ((str: string, defaultDecoder: defaultDecoder, type: 'key' | 'value') => any)
     | undefined
   arrayLimit?: number | undefined
   parseArrays?: boolean | undefined
@@ -47,9 +45,6 @@ export interface IParseBaseOptions {
   parameterLimit?: number | undefined
   strictNullHandling?: boolean | undefined
   ignoreQueryPrefix?: boolean | undefined
-  charset?: 'utf-8' | 'iso-8859-1' | undefined
-  charsetSentinel?: boolean | undefined
-  interpretNumericEntities?: boolean | undefined
   allowEmptyArrays?: boolean | undefined
   duplicates?: 'combine' | 'first' | 'last' | undefined
 }
