@@ -12,6 +12,7 @@ A querystring parsing and stringifying library — modernized ESM-only fork of [
 Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1) with the following changes:
 
 - ✅ **ESM-only** — native ES modules, no CommonJS
+- ✅ **Types included** — no separate `@types/qs` package needed
 - ✅ **Node 18+** — polyfills for older runtimes removed
 - ✅ **Zero dependencies** — `side-channel` replaced with native `WeakMap`
 - ✅ **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. Legacy IE/Rails quirks that no longer apply. Encoder/decoder callbacks no longer receive a `charset` argument
