@@ -1,5 +1,8 @@
 # qs-esm
 
+[![CI](https://github.com/payloadcms/qs-esm/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/payloadcms/qs-esm/actions/workflows/main.yml)
+[![NPM version](https://img.shields.io/npm/v/qs-esm.svg?style=flat)](https://www.npmjs.com/package/qs-esm)
+
 A querystring parsing and stringifying library — modernized ESM-only fork of [qs](https://github.com/ljharb/qs), maintained by [Payload](https://payloadcms.com).
 
 > Not endorsed by [Jordan Harband](https://github.com/ljharb), the lead maintainer of qs. Originally created by [TJ Holowaychuk](https://github.com/visionmedia/node-querystring).
@@ -8,13 +11,11 @@ A querystring parsing and stringifying library — modernized ESM-only fork of [
 
 Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1) with the following changes:
 
-| | |
-|---|---|
-| **ESM-only** | Native ES modules, no CommonJS |
-| **Node 18+** | Polyfills for older runtimes removed |
-| **Zero dependencies** | `side-channel` replaced with native `WeakMap` |
-| **UTF-8 only** | `charset`, `charsetSentinel`, `interpretNumericEntities` dropped — legacy IE/Rails browser quirks that no longer apply. Removes unnecessary code and branching on every encode/decode call. Encoder/decoder callbacks no longer receive a `charset` argument |
-| **Security backport** | `arrayLimit` now applies to `[]` notation ([GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883)) |
+- **ESM-only** — native ES modules, no CommonJS
+- **Node 18+** — polyfills for older runtimes removed
+- **Zero dependencies** — `side-channel` replaced with native `WeakMap`
+- **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. These were legacy IE/Rails browser quirks that no longer apply. Removes unnecessary code and branching on every encode/decode call. Encoder/decoder callbacks no longer receive a `charset` argument
+- **Security backport** — `arrayLimit` now applies to `[]` notation ([GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883))
 
 ## Migrate from qs
 
