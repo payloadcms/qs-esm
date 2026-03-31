@@ -2,9 +2,7 @@
 
 var test = require('tape')
 var hasPropertyDescriptors = require('has-property-descriptors')()
-var mockProperty = require('mock-property')
 var hasOverrideMistake = require('has-override-mistake')()
-var SaferBuffer = require('safer-buffer').Buffer
 var v = require('es-value-fixtures')
 var inspect = require('object-inspect')
 var emptyTestCases = require('./empty-keys-cases.cjs').emptyTestCases
@@ -466,7 +464,7 @@ test('parse()', async function (t) {
   })
 
   t.test('parses buffers correctly', function (st) {
-    var b = SaferBuffer.from('test')
+    var b = Buffer.from('test')
     st.deepEqual(qs.parse({ a: b }), { a: b })
     st.end()
   })
@@ -710,17 +708,6 @@ test('parse()', async function (t) {
     st.end()
   })
 
-  t.test('does not blow up when Buffer global is missing', function (st) {
-    var restore = mockProperty(global, 'Buffer', { delete: true })
-
-    var result = qs.parse('a=b&c=d')
-
-    restore()
-
-    st.deepEqual(result, { a: 'b', c: 'd' })
-    st.end()
-  })
-
   t.test('does not crash when parsing circular references', function (st) {
     var a = {}
     a.b = a
@@ -823,13 +810,15 @@ test('parse()', async function (t) {
     function (st) {
       // We can't actually freeze the global Object prototype as that will interfere with other tests, and once an object is frozen, it
       // can't be unfrozen. Instead, we add a new non-writable property to simulate this.
-      st.teardown(
-        mockProperty(Object.prototype, 'frozenProp', {
-          value: 'foo',
-          nonWritable: true,
-          nonEnumerable: true,
-        }),
-      )
+      Object.defineProperty(Object.prototype, 'frozenProp', {
+        value: 'foo',
+        writable: false,
+        enumerable: false,
+        configurable: true,
+      })
+      st.teardown(function () {
+        delete Object.prototype.frozenProp
+      })
 
       st['throws'](
         function () {

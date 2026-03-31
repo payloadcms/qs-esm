@@ -2,7 +2,6 @@
 
 var test = require('tape')
 var inspect = require('object-inspect')
-var SaferBuffer = require('safer-buffer').Buffer
 
 test('merge()', async function (t) {
   var utils = await import('../lib/utils.js')
@@ -284,7 +283,7 @@ test('isBuffer()', async function (t) {
   var fakeBuffer = { constructor: Buffer }
   t.equal(utils.isBuffer(fakeBuffer), false, 'fake buffer is not a buffer')
 
-  var saferBuffer = SaferBuffer.from('abc')
+  var saferBuffer = Buffer.from('abc')
   t.equal(utils.isBuffer(saferBuffer), true, 'SaferBuffer instance is a buffer')
 
   var buffer = Buffer.from && Buffer.alloc ? Buffer.from('abc') : new Buffer('abc')

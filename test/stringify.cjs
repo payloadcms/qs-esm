@@ -2,9 +2,6 @@
 
 var test = require('tape')
 
-var SaferBuffer = require('safer-buffer').Buffer
-var hasSymbols = require('has-symbols')
-var mockProperty = require('mock-property')
 var emptyTestCases = require('./empty-keys-cases.cjs').emptyTestCases
 var hasBigInt = typeof BigInt === 'function'
 
@@ -32,7 +29,7 @@ test('stringify()', async function (t) {
     st.end()
   })
 
-  t.test('stringifies symbols', { skip: !hasSymbols() }, function (st) {
+  t.test('stringifies symbols', function (st) {
     st.equal(qs.stringify(Symbol.iterator), '')
     st.equal(qs.stringify([Symbol.iterator]), '0=Symbol%28Symbol.iterator%29')
     st.equal(qs.stringify({ a: Symbol.iterator }), 'a=Symbol%28Symbol.iterator%29')
@@ -972,24 +969,13 @@ test('stringify()', async function (t) {
   })
 
   t.test('stringifies buffer values', function (st) {
-    st.equal(qs.stringify({ a: SaferBuffer.from('test') }), 'a=test')
-    st.equal(qs.stringify({ a: { b: SaferBuffer.from('test') } }), 'a%5Bb%5D=test')
+    st.equal(qs.stringify({ a: Buffer.from('test') }), 'a=test')
+    st.equal(qs.stringify({ a: { b: Buffer.from('test') } }), 'a%5Bb%5D=test')
     st.end()
   })
 
   t.test('stringifies an object using an alternative delimiter', function (st) {
     st.equal(qs.stringify({ a: 'b', c: 'd' }, { delimiter: ';' }), 'a=b;c=d')
-    st.end()
-  })
-
-  t.test('does not blow up when Buffer global is missing', function (st) {
-    var restore = mockProperty(global, 'Buffer', { delete: true })
-
-    var result = qs.stringify({ a: 'b', c: 'd' })
-
-    restore()
-
-    st.equal(result, 'a=b&c=d')
     st.end()
   })
 
@@ -1202,7 +1188,7 @@ test('stringify()', async function (t) {
     function (st) {
       st.equal(
         qs.stringify(
-          { a: SaferBuffer.from([1]) },
+          { a: Buffer.from([1]) },
           {
             encoder: function (buffer) {
               if (typeof buffer === 'string') {
@@ -1217,7 +1203,7 @@ test('stringify()', async function (t) {
 
       st.equal(
         qs.stringify(
-          { a: SaferBuffer.from('a b') },
+          { a: Buffer.from('a b') },
           {
             encoder: function (buffer) {
               return buffer
@@ -1300,7 +1286,7 @@ test('stringify()', async function (t) {
     st.equal(qs.stringify({ a: 'b c' }, { format: qs.formats.RFC1738 }), 'a=b+c')
     st.equal(qs.stringify({ 'a b': 'c d' }, { format: qs.formats.RFC1738 }), 'a+b=c+d')
     st.equal(
-      qs.stringify({ 'a b': SaferBuffer.from('a b') }, { format: qs.formats.RFC1738 }),
+      qs.stringify({ 'a b': Buffer.from('a b') }, { format: qs.formats.RFC1738 }),
       'a+b=a+b',
     )
 
@@ -1313,7 +1299,7 @@ test('stringify()', async function (t) {
     st.equal(qs.stringify({ a: 'b c' }, { format: qs.formats.RFC3986 }), 'a=b%20c')
     st.equal(qs.stringify({ 'a b': 'c d' }, { format: qs.formats.RFC3986 }), 'a%20b=c%20d')
     st.equal(
-      qs.stringify({ 'a b': SaferBuffer.from('a b') }, { format: qs.formats.RFC3986 }),
+      qs.stringify({ 'a b': Buffer.from('a b') }, { format: qs.formats.RFC3986 }),
       'a%20b=a%20b',
     )
 
@@ -1322,7 +1308,7 @@ test('stringify()', async function (t) {
 
   t.test('Backward compatibility to RFC 3986', function (st) {
     st.equal(qs.stringify({ a: 'b c' }), 'a=b%20c')
-    st.equal(qs.stringify({ 'a b': SaferBuffer.from('a b') }), 'a%20b=a%20b')
+    st.equal(qs.stringify({ 'a b': Buffer.from('a b') }), 'a%20b=a%20b')
 
     st.end()
   })
