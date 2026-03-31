@@ -68,11 +68,8 @@
   "publishConfig": {
     "ignore": [
       "!dist/*",
-      "bower.json",
-      "component.json",
       ".github/workflows",
-      "logos",
-      "tea.yaml"
+      "logos"
     ]
   }
 }
