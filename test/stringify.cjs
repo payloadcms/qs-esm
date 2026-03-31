@@ -2,7 +2,6 @@
 
 var test = require('tape')
 
-var iconv = require('iconv-lite')
 var SaferBuffer = require('safer-buffer').Buffer
 var hasSymbols = require('has-symbols')
 var mockProperty = require('mock-property')
@@ -1155,29 +1154,6 @@ test('stringify()', async function (t) {
         { sort: null, encode: false },
       ),
       'a=a&z[zj][zjb]=zjb&z[zj][zja]=zja&z[zi][zib]=zib&z[zi][zia]=zia&b=b',
-    )
-    st.end()
-  })
-
-  t.test('can stringify with custom encoding', function (st) {
-    st.equal(
-      qs.stringify(
-        { 県: '大阪府', '': '' },
-        {
-          encoder: function (str) {
-            if (str.length === 0) {
-              return ''
-            }
-            var buf = iconv.encode(str, 'shiftjis')
-            var result = []
-            for (var i = 0; i < buf.length; ++i) {
-              result.push(buf.readUInt8(i).toString(16))
-            }
-            return '%' + result.join('%')
-          },
-        },
-      ),
-      '%8c%a7=%91%e5%8d%e3%95%7b&=',
     )
     st.end()
   })

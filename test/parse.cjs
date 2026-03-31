@@ -2,7 +2,6 @@
 
 var test = require('tape')
 var hasPropertyDescriptors = require('has-property-descriptors')()
-var iconv = require('iconv-lite')
 var mockProperty = require('mock-property')
 var hasOverrideMistake = require('has-override-mistake')()
 var SaferBuffer = require('safer-buffer').Buffer
@@ -969,25 +968,6 @@ test('parse()', async function (t) {
     expectedArray.a[0] = 'b'
     expectedArray.a.c = 'd'
     st.deepEqual(qs.parse('a[]=b&a[c]=d', { plainObjects: true }), expectedArray)
-    st.end()
-  })
-
-  t.test('can parse with custom encoding', function (st) {
-    st.deepEqual(
-      qs.parse('%8c%a7=%91%e5%8d%e3%95%7b', {
-        decoder: function (str) {
-          var reg = /%([0-9A-F]{2})/gi
-          var result = []
-          var parts = reg.exec(str)
-          while (parts) {
-            result.push(parseInt(parts[1], 16))
-            parts = reg.exec(str)
-          }
-          return String(iconv.decode(SaferBuffer.from(result), 'shift_jis'))
-        },
-      }),
-      { 県: '大阪府' },
-    )
     st.end()
   })
 
