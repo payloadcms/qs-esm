@@ -999,6 +999,31 @@ test('parse()', async function (t) {
     st.end()
   })
 
+  test('comma + arrayLimit', function (t) {
+    t.test('comma-separated values within arrayLimit stay as array', function (st) {
+      var result = qs.parse('a=1,2,3', { comma: true, arrayLimit: 5 })
+      st.ok(Array.isArray(result.a), 'result is an array')
+      st.deepEqual(result.a, ['1', '2', '3'], 'all values present')
+      st.end()
+    })
+
+    t.test('comma-separated values exceeding arrayLimit convert to object', function (st) {
+      var result = qs.parse('a=1,2,3,4', { comma: true, arrayLimit: 3 })
+      st.notOk(Array.isArray(result.a), 'result is not an array when over limit')
+      st.deepEqual(result.a, { 0: '1', 1: '2', 2: '3', 3: '4' }, 'all values preserved as object')
+      st.end()
+    })
+
+    t.test('comma-separated values at exactly arrayLimit stay as array', function (st) {
+      var result = qs.parse('a=1,2,3', { comma: true, arrayLimit: 3 })
+      st.ok(Array.isArray(result.a), 'result is an array when exactly at limit')
+      st.deepEqual(result.a, ['1', '2', '3'], 'all values present')
+      st.end()
+    })
+
+    t.end()
+  })
+
   test('DOS', function (t) {
     var arr = []
     for (var i = 0; i < 105; i++) {

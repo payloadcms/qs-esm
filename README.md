@@ -15,7 +15,7 @@ Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1) with the fol
 - ✅ **Node 18+** — polyfills for older runtimes removed
 - ✅ **Zero dependencies** — `side-channel` replaced with native `WeakMap`
 - ✅ **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. Legacy IE/Rails quirks that no longer apply. Encoder/decoder callbacks no longer receive a `charset` argument
-- ✅ **Security backport** — backports security fix for ([GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883))
+- ✅ **Security backports** — backports security fixes for [GHSA-6rw7-vpxm-498p](https://github.com/ljharb/qs/security/advisories/GHSA-6rw7-vpxm-498p) (`arrayLimit` bypass via `[]` notation) and [GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883) (`arrayLimit` bypass via comma parsing)
 
 ## Migrate from qs
 
