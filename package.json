@@ -2,7 +2,7 @@
   "name": "qs-esm",
   "description": "A modernized, esm-only fork of qs without unnecessary polyfills",
   "homepage": "https://github.com/payloadcms/qs-esm",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/payloadcms/qs-esm.git"
