@@ -14,9 +14,6 @@ importers:
       es-value-fixtures:
         specifier: ^1.7.1
         version: 1.7.1
-      for-each:
-        specifier: ^0.3.3
-        version: 0.3.5
       has-override-mistake:
         specifier: ^1.0.1
         version: 1.0.1

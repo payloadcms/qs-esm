@@ -3,7 +3,6 @@
 var test = require('tape')
 var inspect = require('object-inspect')
 var SaferBuffer = require('safer-buffer').Buffer
-var forEach = require('for-each')
 
 test('merge()', async function (t) {
   var utils = await import('../lib/utils.js')
@@ -276,8 +275,7 @@ test('combine()', async function (t) {
 
 test('isBuffer()', async function (t) {
   var utils = await import('../lib/utils.js')
-  forEach(
-    [null, undefined, true, false, '', 'abc', 42, 0, NaN, {}, [], function () {}, /a/g],
+  ;[null, undefined, true, false, '', 'abc', 42, 0, NaN, {}, [], function () {}, /a/g].forEach(
     function (x) {
       t.equal(utils.isBuffer(x), false, inspect(x) + ' is not a buffer')
     },
