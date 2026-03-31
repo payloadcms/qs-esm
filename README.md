@@ -1,38 +1,31 @@
-This is a modernized, ESM-only fork of [qs](https://github.com/ljharb/qs) without unnecessary polyfills. This fork is not endorsed by [Jordan Harband](https://github.com/ljharb), the lead maintainer of qs.
-
 # qs-esm
 
-A querystring parsing and stringifying library with some added security.
+[![CI](https://github.com/payloadcms/qs-esm/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/payloadcms/qs-esm/actions/workflows/main.yml)
+[![NPM version](https://img.shields.io/npm/v/qs-esm.svg?style=flat)](https://www.npmjs.com/package/qs-esm)
 
-Original Maintainer of qs (not of this fork): [Jordan Harband](https://github.com/ljharb)
+A querystring parsing and stringifying library — modernized ESM-only fork of [qs](https://github.com/ljharb/qs), maintained by [Payload](https://payloadcms.com).
 
-The **qs** module was originally created and maintained by [TJ Holowaychuk](https://github.com/visionmedia/node-querystring).
+> Not endorsed by [Jordan Harband](https://github.com/ljharb), the lead maintainer of qs. Originally created by [TJ Holowaychuk](https://github.com/visionmedia/node-querystring).
 
-## Changes from qs
+## What's different from qs
 
-**Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1).**
+Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1) with the following changes:
 
-Changes made in this fork:
-
-- **ESM-only** — native ES modules; no CommonJS support
-- **Node 18+ required** — removed polyfills for older Node.js versions
-- **Zero dependencies** — replaced the `side-channel` npm package with a native `WeakMap` for cyclic reference detection in `stringify`
-- **UTF-8 only** — dropped `charset`, `charsetSentinel`, and `interpretNumericEntities`. These were for legacy browser quirks (old IE iso-8859-1 form submissions, Rails charset sentinel params) that don't apply to modern apps. Dropping them removes branching on every encode/decode call and reduces overall complexity. Custom encoder/decoder callbacks no longer receive a `charset` argument
-- **Security backport** — `arrayLimit` now applies to `[]` (bracket-only) notation, closing the same gap addressed by [GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883) in upstream qs
+- ✅ **ESM-only** — native ES modules, no CommonJS
+- ✅ **Node 18+** — polyfills for older runtimes removed
+- ✅ **Zero dependencies** — `side-channel` replaced with native `WeakMap`
+- ✅ **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. Legacy IE/Rails quirks that no longer apply. Encoder/decoder callbacks no longer receive a `charset` argument
+- ✅ **Security backport** — backports security fix for ([GHSA-w7fw-mjwx-w883](https://github.com/ljharb/qs/security/advisories/GHSA-w7fw-mjwx-w883))
 
 ## Migrate from qs
 
-Install `qs-esm`, uninstall `qs` and `@types/qs`. Then replace:
+Uninstall `qs` and `@types/qs`, install `qs-esm`, then update your import:
 
 ```js
+// before
 import qs from 'qs'
-// or
-const qs = require('qs')
-```
 
-with:
-
-```js
+// after
 import * as qs from 'qs-esm'
 ```
 
