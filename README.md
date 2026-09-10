@@ -18,6 +18,18 @@ Forked from [qs v6.12.1](https://github.com/ljharb/qs/tree/v6.12.1) with the fol
 - ✅ **UTF-8 only** — `charset`, `charsetSentinel`, and `interpretNumericEntities` dropped. Legacy IE/Rails quirks that no longer apply. Encoder/decoder callbacks no longer receive a `charset` argument
 - ✅ **Security backports** — upstream security fixes are tracked and backported as they are published
 
+### Size comparison
+
+|                                | `qs` 6.16.0            | `qs-esm` 8.0.2            |
+| ------------------------------ | ---------------------- | ------------------------- |
+| Dependencies                   | 19                     | **0**                     |
+| `node_modules` size            | 1.7 MB                 | **76 KB**                 |
+| Bundled, `parse` + `stringify` | 42.3 KB (13.5 KB gzip) | **11.4 KB (4.1 KB gzip)** |
+| Bundled, `parse` only          | 42.3 KB (13.5 KB gzip) | **6.1 KB (2.3 KB gzip)**  |
+| Bundled, `stringify` only      | 42.3 KB (13.5 KB gzip) | **5.6 KB (2.2 KB gzip)**  |
+
+Bundled with esbuild (`--bundle --minify --format=esm --platform=browser`).
+
 ## Migrate from qs
 
 Uninstall `qs` and `@types/qs`, install `qs-esm`, then update your import:
