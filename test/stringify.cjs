@@ -1285,10 +1285,7 @@ test('stringify()', async function (t) {
   t.test('RFC 1738 serialization', function (st) {
     st.equal(qs.stringify({ a: 'b c' }, { format: qs.formats.RFC1738 }), 'a=b+c')
     st.equal(qs.stringify({ 'a b': 'c d' }, { format: qs.formats.RFC1738 }), 'a+b=c+d')
-    st.equal(
-      qs.stringify({ 'a b': Buffer.from('a b') }, { format: qs.formats.RFC1738 }),
-      'a+b=a+b',
-    )
+    st.equal(qs.stringify({ 'a b': Buffer.from('a b') }, { format: qs.formats.RFC1738 }), 'a+b=a+b')
 
     st.equal(qs.stringify({ 'foo(ref)': 'bar' }, { format: qs.formats.RFC1738 }), 'foo(ref)=bar')
 
@@ -1574,10 +1571,7 @@ test('stringify()', async function (t) {
       foo: chars.join(''),
     }
 
-    st.equal(
-      qs.stringify(obj, { arrayFormat: 'bracket' }),
-      'foo=' + expected.join(''),
-    )
+    st.equal(qs.stringify(obj, { arrayFormat: 'bracket' }), 'foo=' + expected.join(''))
 
     st.end()
   })

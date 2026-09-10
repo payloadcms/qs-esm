@@ -11,8 +11,7 @@ export interface IStringifyBaseOptions {
   skipNulls?: boolean | undefined
   encode?: boolean | undefined
   encoder?:
-    | ((str: any, defaultEncoder: defaultEncoder, type: 'key' | 'value') => string)
-    | undefined
+    ((str: any, defaultEncoder: defaultEncoder, type: 'key' | 'value') => string) | undefined
   filter?: Array<string | number> | ((prefix: string, value: any) => any) | undefined
   arrayFormat?: 'indices' | 'brackets' | 'repeat' | 'comma' | undefined
   indices?: boolean | undefined
@@ -35,8 +34,7 @@ export interface IParseBaseOptions {
   delimiter?: string | RegExp | undefined
   depth?: number | false | undefined
   decoder?:
-    | ((str: string, defaultDecoder: defaultDecoder, type: 'key' | 'value') => any)
-    | undefined
+    ((str: string, defaultDecoder: defaultDecoder, type: 'key' | 'value') => any) | undefined
   arrayLimit?: number | undefined
   parseArrays?: boolean | undefined
   plainObjects?: boolean | undefined
