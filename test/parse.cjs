@@ -1168,6 +1168,23 @@ test('parse()', async function (t) {
       st.end()
     })
 
+    t.test('mixed notation produces consistent results when arrayLimit is exceeded', function (st) {
+      var expected = { a: { 0: 'b', 1: 'c', 2: 'd' } }
+
+      st.deepEqual(qs.parse('a[]=b&a[1]=c&a=d', { arrayLimit: -1 }), expected, 'arrayLimit -1')
+
+      st.deepEqual(qs.parse('a[]=b&a[1]=c&a=d', { arrayLimit: 0 }), expected, 'arrayLimit 0')
+
+      // qs-esm allows index 1 at arrayLimit 1; use index 2 to exceed it.
+      st.deepEqual(
+        qs.parse('a[]=b&a[2]=c&a=d', { arrayLimit: 1 }),
+        { a: { 0: 'b', 2: 'c', 3: 'd' } },
+        'arrayLimit 1',
+      )
+
+      st.end()
+    })
+
     t.end()
   })
 
