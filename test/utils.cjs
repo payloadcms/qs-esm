@@ -282,6 +282,36 @@ test('isBuffer()', async function (t) {
 
   var fakeBuffer = { constructor: Buffer }
   t.equal(utils.isBuffer(fakeBuffer), false, 'fake buffer is not a buffer')
+  ;['x', 1, true, {}, [], { isBuffer: true }].forEach(function (notCallable) {
+    var obj = { constructor: { isBuffer: notCallable } }
+    t.doesNotThrow(
+      function () {
+        utils.isBuffer(obj)
+      },
+      'non-callable `constructor.isBuffer` (' + inspect(notCallable) + ') does not throw',
+    )
+    t.equal(
+      utils.isBuffer(obj),
+      false,
+      'non-callable `constructor.isBuffer` (' + inspect(notCallable) + ') is not a buffer',
+    )
+  })
+
+  var nullObject = { __proto__: null, constructor: { __proto__: null, isBuffer: 'y' } }
+  t.equal(
+    utils.isBuffer(nullObject),
+    false,
+    'null object with non-callable `constructor.isBuffer` is not a buffer',
+  )
+
+  var duckBuffer = {
+    constructor: {
+      isBuffer: function () {
+        return true
+      },
+    },
+  }
+  t.equal(utils.isBuffer(duckBuffer), true, 'callable `constructor.isBuffer` is still honored')
 
   var saferBuffer = Buffer.from('abc')
   t.equal(utils.isBuffer(saferBuffer), true, 'SaferBuffer instance is a buffer')

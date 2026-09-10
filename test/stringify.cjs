@@ -1023,6 +1023,52 @@ test('stringify()', async function (t) {
     st.end()
   })
 
+  t.test('does not throw on a non-callable `constructor.isBuffer` key', function (st) {
+    var input = { a: { constructor: { isBuffer: 'x' } } }
+    st.doesNotThrow(function () {
+      qs.stringify(input)
+    })
+    st.equal(qs.stringify(input), 'a%5Bconstructor%5D%5BisBuffer%5D=x')
+    st.equal(
+      qs.stringify({ a: { constructor: { isBuffer: { b: 'c' } } } }),
+      'a%5Bconstructor%5D%5BisBuffer%5D%5Bb%5D=c',
+    )
+    st.equal(
+      qs.stringify({ a: { constructor: { isBuffer: ['b'] } } }),
+      'a%5Bconstructor%5D%5BisBuffer%5D%5B0%5D=b',
+    )
+    st.equal(
+      qs.stringify({ a: { constructor: { isBuffer: true } } }),
+      'a%5Bconstructor%5D%5BisBuffer%5D=true',
+    )
+    st.end()
+  })
+
+  t.test('round-trips a parsed `constructor[isBuffer]` key', function (st) {
+    var str = 'x%5Bconstructor%5D%5BisBuffer%5D=y'
+
+    var plain = qs.parse(str, { plainObjects: true })
+    st.deepEqual(
+      plain,
+      { __proto__: null, x: { __proto__: null, constructor: { __proto__: null, isBuffer: 'y' } } },
+      'plainObjects keeps the key',
+    )
+    st.doesNotThrow(function () {
+      qs.stringify(plain)
+    })
+    st.equal(qs.stringify(plain), str, 'plainObjects round-trips')
+
+    var proto = qs.parse(str, { allowPrototypes: true })
+    st.deepEqual(proto, { x: { constructor: { isBuffer: 'y' } } }, 'allowPrototypes keeps the key')
+    st.doesNotThrow(function () {
+      qs.stringify(proto)
+    })
+    st.equal(qs.stringify(proto), str, 'allowPrototypes round-trips')
+
+    st.equal(qs.stringify(qs.parse(str)), '', 'default options drop the key')
+    st.end()
+  })
+
   t.test('stringifies an object using an alternative delimiter', function (st) {
     st.equal(qs.stringify({ a: 'b', c: 'd' }, { delimiter: ';' }), 'a=b;c=d')
     st.end()
